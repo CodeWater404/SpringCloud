@@ -22,8 +22,12 @@ eureka:
 #      defaultZone: http://localhost:7001/eureka
       # 集群版
       defaultZone: http://eureka7001.com:7001/eureka,http://eureka7002.com:7002/eureka
-    
-    
+  instance:
+    instance-id: payment8002
+      #    实例显示ip(鼠标放上去，在eureka管理页面左下角会有)
+    prefer-ip-address: true
+
+
 mybatis:
   mapperLocations: classpath:mapper/*.xml
   type-aliases-package: com.codewater.com.codewater.com.codewater.springcloud.entities    # 所有Entity别名类所在包

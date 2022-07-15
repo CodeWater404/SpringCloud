@@ -12,7 +12,17 @@
 
 
 
-## 支付模块
+## 支付模块Payment
+
+服务提供方
+
+> `cloud-provider-payment-8001-8002`：选用`eureka`
+>
+> `cloud-provider-payment-8004`：选用`zookeeper`
+>
+> `cloud-providerconsul-payment-8006`：选用`consul`
+>
+> 
 
 ![image-20220702222351094](pictures/image-20220702222351094.png)
 
@@ -24,7 +34,15 @@
 
 
 
-## 消费者模块
+## 消费者模块Consumer
+
+服务调用方
+
+> `cloud-consumer-order80`:使用`eureka`
+>
+> `cloud-consumerzk-order80`:使用`zookeeper`
+>
+> `cloud-consumerconsul-order80`:使用`consul`
 
 ![image-20220714201934827](pictures/image-20220714201934827.png)
 
@@ -63,6 +81,8 @@
 
 ### Eureka
 
+> `cloud-eureka-server-7001-7002`
+
 
 
 #### 架构
@@ -97,7 +117,13 @@
 
    ![image-20220714225224873](pictures/image-20220714225224873.png)
 
+   > `eureka`自我保护机制
+   >
+   > 可以设置关闭，默认是开启的
+
    ![image-20220715005943482](pictures/image-20220715005943482.png)
+
+   ![image-20220715140356055](pictures/image-20220715140356055.png)
 
    
 
@@ -106,6 +132,56 @@
 
 
 
+
+### Zookeeper
+
+> [官网下载](http://archive.apache.org/dist/zookeeper)
+>
+> 参看我的博客[安装](https://www.cnblogs.com/CodeWater404/p/16482043.html)
+>
+> 没有图形管理界面
+
+
+
+#### 架构
+
+![image-20220715171412752](pictures/image-20220715171412752.png)
+
+
+
+
+
+### Consul
+
+![image-20220715181337515](pictures/image-20220715181337515.png)
+
+![image-20220715181419450](pictures/image-20220715181419450.png)
+
+> [官网下载](https://www.consul.io/downloads)
+
+
+
+#### 安装启动
+
+1. 启动，在安装目录下，cmd
+
+   ![image-20220715182533339](pictures/image-20220715182533339.png)
+
+   ![image-20220715182618575](pictures/image-20220715182618575.png)
+
+2. 访问
+
+   ![image-20220715182546969](pictures/image-20220715182546969.png)
+
+   ![image-20220715182654097](pictures/image-20220715182654097.png)
+
+
+
+
+
+### 三个服务中心异同点
+
+![image-20220715212551463](pictures/image-20220715212551463.png)
 
 
 
