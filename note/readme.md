@@ -5,8 +5,16 @@
 # SpringCloud
 
 > 学习springcloud， 参考B站尚硅谷，侵删。
+>
+> `×`表示官方不再维护
 
-详细的版本依赖[查看](https://start.spring.io/actuator/info)
+1. 详细的版本依赖[查看](https://start.spring.io/actuator/info)
+
+2. 整个内容
+
+   ![image-20220716181552923](pictures/image-20220716181552923.png)
+
+
 
 
 
@@ -187,5 +195,224 @@
 
 
 
+## 服务调用
+
+![image-20220716134846848](pictures/image-20220716134846848.png)
+
+![image-20220716134450888](pictures/image-20220716134450888.png)
+
+> 本地的负载均衡：进程内LB（Ribbon）
+>
+> ![image-20220716134754612](pictures/image-20220716134754612.png)
+>
+> 服务端的负载均衡：集中式LB（Nginx）
+>
+> ![image-20220716134742406](pictures/image-20220716134742406.png)
 
 
+
+
+
+### Ribbon
+
+
+
+#### 架构
+
+![image-20220716134945277](pictures/image-20220716134945277.png)
+
+![image-20220716135039877](pictures/image-20220716135039877.png)
+
+
+
+![image-20220716135021294](pictures/image-20220716135021294.png)
+
+![image-20220716141303350](pictures/image-20220716141303350.png)
+
+> 也就是选择一个负载均衡的调用算法。
+
+
+
+
+
+#### RestTemplate
+
+1. 大概
+
+   ![image-20220716135953542](pictures/image-20220716135953542.png)
+
+2. `getForObject`和`getForEntity`
+
+   ![image-20220716135924187](pictures/image-20220716135924187.png)
+
+
+
+
+
+### LoadBalancer
+
+在`cloud-consumer-order80`中有个`lb`包下面手写了一个负载均衡轮询的算法
+
+
+
+
+
+## 服务调用2
+
+
+
+
+
+### Feign×
+
+不用研究
+
+
+
+### OpenFeign
+
+![image-20220716172609830](pictures/image-20220716172609830.png)
+
+==用在消费端==
+
+直接用一个接口+一个注解远程调用，不像Ribbon+restTemplate才能调
+
+
+
+
+
+
+
+## 服务降级
+
+![image-20220716181833302](pictures/image-20220716181833302.png)
+
+
+
+
+
+
+
+### Hystrix×
+
+断路器
+
+停更。。。。。
+
+![image-20220716181845133](pictures/image-20220716181845133.png)
+
+![image-20220716181937170](pictures/image-20220716181937170.png)
+
+
+
+#### 相关概念
+
+
+
+![image-20220716182356919](pictures/image-20220716182356919.png)
+
+
+
+
+
+
+
+
+
+
+
+### resilience4j
+
+少用
+
+
+
+
+
+
+
+### sentinel
+
+常用
+
+
+
+
+
+
+
+## 服务网关
+
+
+
+
+
+
+
+
+
+### Zuul×
+
+
+
+
+
+
+
+### Zuul2
+
+
+
+
+
+
+
+### gateway
+
+
+
+
+
+
+
+## 服务配置
+
+
+
+
+
+### Config×
+
+
+
+
+
+
+
+### Nacos
+
+
+
+
+
+
+
+
+
+## 服务总线
+
+
+
+
+
+
+
+### Bus
+
+
+
+
+
+
+
+### Nacos

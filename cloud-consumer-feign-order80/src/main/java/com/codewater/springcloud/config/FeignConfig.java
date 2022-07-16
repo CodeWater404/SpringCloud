@@ -1,20 +1,18 @@
 package com.codewater.springcloud.config;
 
+import feign.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * @author ： CodeWater
- * @create ：2022-07-14-20:16
+ * @create ：2022-07-16-18:12
  * @Function Description ：
  */
 @Configuration
-public class ApplicationContextConfig {
+public class FeignConfig {
     @Bean
-//    @LoadBalanced  //添加负载均衡
-    public RestTemplate getRestTemplate(){
-        return new RestTemplate();
+    Logger.Level feignLoggerLevel(){
+        return Logger.Level.FULL;
     }
-    
 }

@@ -47,4 +47,13 @@ public class PaymentController {
             return new CommonResult( 444 , "没有对应记录， 查询ID： " + id , null );
         }
     }
+
+    /**
+     * 调用自定义的负载均衡
+     * @return
+     */
+    @GetMapping("/payment/lb")
+    public String getPaymentLB(){
+        return serverPort;
+    }
 }
