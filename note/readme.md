@@ -30,7 +30,7 @@
 >
 > `cloud-providerconsul-payment-8006`：选用`consul`
 >
-> 
+> `cloud-provider-hystrix-payment8001`：`eureka`中心，`hystrix`服务降级、熔断、限流
 
 ![image-20220702222351094](pictures/image-20220702222351094.png)
 
@@ -51,6 +51,10 @@
 > `cloud-consumerzk-order80`:使用`zookeeper`
 >
 > `cloud-consumerconsul-order80`:使用`consul`
+>
+> `cloud-consumer-feign-hystrix-order80`：`eureka`中心，`hystrix`服务降级、熔断、限流
+>
+> `cloud-consumer-hystrix-dashboard9001`：`eureka`中心，`hystrix`仪表盘
 
 ![image-20220714201934827](pictures/image-20220714201934827.png)
 
@@ -313,9 +317,120 @@
 
 
 
+#### 压力测试
+
+用Jmeter
 
 
 
+#### 服务降级
+
+![image-20220717174421422](pictures/image-20220717174421422.png)
+
+1. 服务端降级
+2. 客户端降级（一般在这边设计）
+
+![image-20220717172041422](pictures/image-20220717172041422.png)
+
+3. 容易出现呢代码膨胀，需要弄一个全局配置
+
+   ![image-20220717172321065](pictures/image-20220717172321065.png)
+
+4. 在消费者这边调用远程服务的接口这里设置（进一步解耦）
+
+   ![image-20220717173040338](pictures/image-20220717173040338.png)
+
+   ![image-20220717173526740](pictures/image-20220717173526740.png)
+
+   
+
+
+
+#### 服务熔断
+
+![image-20220717174434409](pictures/image-20220717174434409.png)
+
+![image-20220717174519645](pictures/image-20220717174519645.png)
+
+`@HystrixCommand`
+
+![image-20220717174655108](pictures/image-20220717174655108.png)
+
+> 错误服务次数到达一定数后，所有服务都不可访问；但是当`部分正确服务`到达一定量后（有个调用成功的比例），所有服务就`会恢复`！！
+>
+> ```java
+> //==========================服务熔断============================
+>     @HystrixCommand(fallbackMethod="paymentCircuitBreaker_fallback" , commandProperties={
+>             @HystrixProperty(name="circuitBreaker.enabled" , value="true" ), // 是否开启断路器
+>             @HystrixProperty(name="circuitBreaker.requestVolumeThreshold" , value="10" ), // 请求次数
+>             @HystrixProperty(name="circuitBreaker.sleepWindowInMilliseconds" , value="10000" ),// 时间窗口期
+>             @HystrixProperty(name="circuitBreaker.errorThresholdPercentage" , value="true" ),// 失败率达到多少后跳闸
+>     })
+> 
+> ```
+
+![image-20220717181603042](pictures/image-20220717181603042.png)
+
+![image-20220717181741285](pictures/image-20220717181741285.png)
+
+![image-20220717181858473](pictures/image-20220717181858473.png)
+
+![image-20220717181932406](pictures/image-20220717181932406.png)
+
+
+
+
+
+#### 服务限流
+
+> 具体看alibaba的`sentinel`
+
+
+
+
+
+#### DashBoard
+
+仪表盘：
+
+`@EnableHystrixDashboard`
+
+![image-20220717184106268](pictures/image-20220717184106268.png)
+
+![image-20220717215559962](pictures/image-20220717215559962.png)
+
+1. 主启动类需要配置
+
+   ```java
+   /**
+        *此配置是为了服务监控而配置，与服务容错本身无关，springcloud升级后的坑
+        *ServletRegistrationBean因为springboot的默认路径不是"/hystrix.stream"，
+        *只要在自己的项目里配置上下面的servlet就可以了
+        */
+       @Bean
+       public ServletRegistrationBean getServlet() {
+           HystrixMetricsStreamServlet streamServlet = new HystrixMetricsStreamServlet();
+           ServletRegistrationBean registrationBean = new ServletRegistrationBean(streamServlet);
+           registrationBean.setLoadOnStartup(1);
+           registrationBean.addUrlMappings("/hystrix.stream");
+           registrationBean.setName("HystrixMetricsStreamServlet");
+           return registrationBean;
+       }
+   ```
+
+2. 访问地址样例：http://localhost:8001/hystrix.stream
+
+   ![image-20220717215809800](pictures/image-20220717215809800.png)
+
+3. 访问成功的页面
+
+   ![image-20220717215908938](pictures/image-20220717215908938.png)
+
+4. 访问错误的
+
+   ![image-20220717220126030](pictures/image-20220717220126030.png)
+
+   
 
 
 
@@ -327,15 +442,9 @@
 
 
 
-
-
-
-
 ### sentinel
 
 常用
-
-
 
 
 
