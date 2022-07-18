@@ -456,27 +456,103 @@
 
 
 
-
-
-
-
 ### Zuul×
 
+过期
 
+![image-20220718124433489](pictures/image-20220718124433489.png)
 
-
+![image-20220718124802228](pictures/image-20220718124802228.png)
 
 
 
 ### Zuul2
 
+过期
+
+
+
+### Gateway
+
+
+
+#### 概述
+
+![image-20220718123647654](pictures/image-20220718123647654.png)
+
+![image-20220718123902569](pictures/image-20220718123902569.png)
+
+![image-20220718124107405](pictures/image-20220718124107405.png)
+
+![image-20220718124245574](pictures/image-20220718124245574.png)
+
+![image-20220718124534170](pictures/image-20220718124534170.png)
+
+#### 路由
+
+![image-20220718124956396](pictures/image-20220718124956396.png)
 
 
 
 
 
+#### 断言
 
-### gateway
+![image-20220718125048324](pictures/image-20220718125048324.png)
+
+
+
+
+
+#### 过滤
+
+![image-20220718125100481](pictures/image-20220718125100481.png)
+
+![image-20220718141318422](pictures/image-20220718141318422.png)
+
+> 自定义
+>
+> ![image-20220718141446407](pictures/image-20220718141446407.png)
+
+
+
+
+
+#### 访问
+
+![image-20220718132312591](pictures/image-20220718132312591.png)
+
+* 配置：
+
+  ```yml
+  routes:
+          - id: payment_routh #payment_route    #路由的ID，没有固定规则但要求唯一，建议配合服务名
+            uri: http://localhost:8001          #匹配后提供服务的路由地址
+            predicates: # 断言
+              - Path=/payment/get/**         # 断言，路径相匹配的进行路由
+  ```
+
+* 方式：
+
+  ![image-20220718133030437](pictures/image-20220718133030437.png)
+
+
+
+
+
+#### curl命令发送http请求
+
+1. 不带cookie
+
+![image-20220718140322715](pictures/image-20220718140322715.png)
+
+2. 带cookie
+
+   ![image-20220718140326683](pictures/image-20220718140326683.png)
+
+3. 带请求头
+
+   ![image-20220718140945077](pictures/image-20220718140945077.png)
 
 
 
@@ -486,11 +562,25 @@
 
 ## 服务配置
 
+![image-20220718143617540](pictures/image-20220718143617540.png)
+
+![image-20220718144011311](pictures/image-20220718144011311.png)
+
+![image-20220718144031310](pictures/image-20220718144031310.png)
+
 
 
 
 
 ### Config×
+
+![image-20220718185859992](pictures/image-20220718185859992.png)
+
+![image-20220718190046927](pictures/image-20220718190046927.png)
+
+
+
+![image-20220718190021119](pictures/image-20220718190021119.png)
 
 
 
