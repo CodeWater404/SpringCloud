@@ -23,11 +23,11 @@ spring:
       label: master
       
 #rabbitmq相关配置
-#rabbitmq:
-#  host: localhost
+rabbitmq:
+  host: 192.168.138.100:5672
 #  port: 5672
-#  username: guest
-#  password: guest
+  username: root
+  password: root
 
 #服务注册到eureka地址
 eureka:
@@ -36,8 +36,8 @@ eureka:
       defaultZone: http://localhost:7001/eureka
 
 ##rabbitmq相关配置,暴露bus刷新配置的端点
-#management:
-#  endpoints: #暴露bus刷新配置的端点
-#    web:
-#      exposure:
-#        include: 'bus-refresh'
+management:
+  endpoints: #暴露bus刷新配置的端点
+    web:
+      exposure:
+        include: 'bus-refresh'
