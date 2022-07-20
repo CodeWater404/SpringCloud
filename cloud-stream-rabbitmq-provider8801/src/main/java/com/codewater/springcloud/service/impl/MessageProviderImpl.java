@@ -14,7 +14,7 @@ import java.util.UUID;
  * @create ：2022-07-20-0:51
  * @Function Description ：
  */
-@EnableBinding(Source.class)
+@EnableBinding(Source.class) //生产者
 public class MessageProviderImpl implements IMessageProvider {
     
     @Resource

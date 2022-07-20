@@ -672,3 +672,30 @@
 
 
 
+![image-20220720222205650](pictures/image-20220720222205650.png)
+
+![image-20220720222341088](pictures/image-20220720222341088.png)
+
+
+
+* 消息持久化
+
+  把8802的分组去掉，然后让生产者8801发送消息，8802接收不到，这时候启动8803，会发现8803还是可以接收到启动之前8801发送的消息！
+
+
+
+## Sleuth分布式请求链路跟踪
+
+
+
+![image-20220720223927056](pictures/image-20220720223927056.png)
+
+![image-20220720225357202](pictures/image-20220720225357202.png)
+
+![image-20220720225423363](pictures/image-20220720225423363.png)
+
+![image-20220720225443054](pictures/image-20220720225443054.png)
+
+[zipkin下载地址](https://dl.bintray.com/openzipkin/maven/io/zipkin/java/zipkin-server/)
+
+我访问不了？？？
