@@ -30,4 +30,4 @@ eureka:
 
 mybatis:
   mapperLocations: classpath:mapper/*.xml
-  type-aliases-package: com.codewater.com.codewater.com.codewater.springcloud.entities    # 所有Entity别名类所在包
+  type-aliases-package: com.codewater.com.codewater.com.codewater.com.codewater.springcloud.entities    # 所有Entity别名类所在包

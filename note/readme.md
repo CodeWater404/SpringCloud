@@ -71,7 +71,7 @@
 ```xml
 <!-- 引入自己定义的api通用包，可以使用Payment支付Entity -->
         <dependency>
-            <groupId>com.codewater.com.codewater.com.codewater.springcloud</groupId>
+            <groupId>com.codewater.com.codewater.com.codewater.com.codewater.springcloud</groupId>
             <artifactId>cloud-api-commons</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -191,9 +191,65 @@
 
 
 
+
+
+### Nacos
+
+![image-20220720232709282](pictures/image-20220720232709282.png)
+
+
+
+#### 注册中心
+
+自带负载均衡
+
+
+
+
+
+#### 配置中心
+
+自动刷新，不需要别的配置
+
+
+
+##### 命名空间
+
+![image-20220721173829979](pictures/image-20220721173829979.png)
+
+![image-20220721173938786](pictures/image-20220721173938786.png)
+
+![image-20220721174001504](pictures/image-20220721174001504.png)
+
+![image-20220721174411329](pictures/image-20220721174411329.png)
+
+
+
+1. ![image-20220721180617268](pictures/image-20220721180617268.png)
+
+2. ![image-20220721180716920](pictures/image-20220721180716920.png)
+
+   
+
+
+
+#### 集群和持久化
+
+![image-20220721181436342](pictures/image-20220721181436342.png)
+
+
+
+
+
+
+
 ### 三个服务中心异同点
 
 ![image-20220715212551463](pictures/image-20220715212551463.png)
+
+![image-20220720233147206](pictures/image-20220720233147206.png)
+
+
 
 
 
