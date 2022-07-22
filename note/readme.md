@@ -755,3 +755,304 @@
 [zipkin下载地址](https://dl.bintray.com/openzipkin/maven/io/zipkin/java/zipkin-server/)
 
 我访问不了？？？
+
+
+
+
+
+## Sentinel
+
+![image-20220722142346301](pictures/image-20220722142346301.png)
+
+![image-20220722142635012](pictures/image-20220722142635012.png)
+
+![image-20220722143016512](pictures/image-20220722143016512.png)
+
+[下载](https://github.com/alibaba/Sentinel/releases/tag/1.7.0)
+
+![image-20220722143601204](pictures/image-20220722143601204.png)
+
+![image-20220722143633174](pictures/image-20220722143633174.png)
+
+`默认占用的8080端口！！`
+
+账号秘密码是sentinel
+
+![image-20220722143813385](pictures/image-20220722143813385.png)
+
+![image-20220722144700399](pictures/image-20220722144700399.png)
+
+
+
+
+
+### 流控规则
+
+
+
+#### 流控模式
+
+![image-20220722150443214](pictures/image-20220722150443214.png)
+
+![image-20220722150504638](pictures/image-20220722150504638.png)
+
+1. 直接![image-20220722150816435](pictures/image-20220722150816435.png)
+
+   > QPS（外部），线程数（服务器内部）
+   >
+   > ![image-20220722151245210](pictures/image-20220722151245210.png)
+
+2. 关联（支付–下订单）
+
+   ![image-20220722151740771](pictures/image-20220722151740771.png)
+
+   ![image-20220722151833171](pictures/image-20220722151833171.png)
+
+   测试：
+
+   ![image-20220722152057168](pictures/image-20220722152057168.png)
+
+   ![image-20220722153421890](pictures/image-20220722153421890.png)
+
+   结果：A访问失败
+
+3. 链路
+
+
+
+#### 流控效果
+
+1. 预热
+
+![image-20220722153809147](pictures/image-20220722153809147.png)
+
+![image-20220722153833181](pictures/image-20220722153833181.png)
+
+![image-20220722153931047](pictures/image-20220722153931047.png)
+
+![image-20220722154030859](pictures/image-20220722154030859.png)
+
+2. 排队等待
+
+   ![image-20220722154408822](pictures/image-20220722154408822.png)
+
+   ![image-20220722154439177](pictures/image-20220722154439177.png)
+
+   ![image-20220722154453540](pictures/image-20220722154453540.png)
+
+   ![image-20220722154952663](pictures/image-20220722154952663.png)
+
+   结果：
+
+   ![image-20220722155024314](pictures/image-20220722155024314.png)
+
+3. 快速失败： 到达阈值，直接失败
+
+
+
+
+
+### 降级
+
+![image-20220722155210298](pictures/image-20220722155210298.png)
+
+![image-20220722155222969](pictures/image-20220722155222969.png)
+
+![image-20220722155246921](pictures/image-20220722155246921.png)
+
+![image-20220722155311123](pictures/image-20220722155311123.png)
+
+![image-20220722155335280](pictures/image-20220722155335280.png)
+
+![image-20220722155404884](pictures/image-20220722155404884.png)
+
+![image-20220722155415518](pictures/image-20220722155415518.png)
+
+![image-20220722155435324](pictures/image-20220722155435324.png)
+
+
+
+
+
+#### RT平均响应时间
+
+![image-20220722155541648](pictures/image-20220722155541648.png)
+
+![image-20220722155625902](pictures/image-20220722155625902.png)
+
+![image-20220722155653941](pictures/image-20220722155653941.png)
+
+![image-20220722155810644](pictures/image-20220722155810644.png)
+
+
+
+
+
+#### 异常比例
+
+![image-20220722161459255](pictures/image-20220722161459255.png)
+
+![image-20220722161611372](pictures/image-20220722161611372.png)
+
+![image-20220722161639675](pictures/image-20220722161639675.png)
+
+![image-20220722161646696](pictures/image-20220722161646696.png)
+
+
+
+![image-20220722161757696](pictures/image-20220722161757696.png)
+
+
+
+
+
+#### 异常数
+
+![image-20220722162106055](pictures/image-20220722162106055.png)
+
+![image-20220722162138032](pictures/image-20220722162138032.png)
+
+![image-20220722162223200](pictures/image-20220722162223200.png)
+
+![image-20220722162245141](pictures/image-20220722162245141.png)
+
+![image-20220722162305058](pictures/image-20220722162305058.png)
+
+访问5次后就会提示Blocked by Sentinel (flow limiting)
+
+
+
+### 热点Key限流
+
+![image-20220722162648819](pictures/image-20220722162648819.png)
+
+![image-20220722162724123](pictures/image-20220722162724123.png)
+
+![image-20220722162830883](pictures/image-20220722162830883.png)
+
+![image-20220722163338382](pictures/image-20220722163338382.png)
+
+访问参数0，访问次数超过配置的阈值就调用自己的异常处理方法
+
+![image-20220722164340505](pictures/image-20220722164340505.png)
+
+> 只要带有参数0，p1的都会被限制
+
+
+
+#### 参数例外项
+
+![image-20220722164647809](pictures/image-20220722164647809.png)
+
+
+
+![image-20220722164744293](pictures/image-20220722164744293.png)
+
+![image-20220722164811788](pictures/image-20220722164811788.png)
+
+
+
+注意：
+
+> ![image-20220722165027783](pictures/image-20220722165027783.png)
+
+
+
+
+
+### 系统规则
+
+![image-20220722165540206](pictures/image-20220722165540206.png)
+
+![image-20220722165555553](pictures/image-20220722165555553.png)
+
+![image-20220722165631407](pictures/image-20220722165631407.png)
+
+
+
+
+
+### @SentinelResource
+
+
+
+#### 按资源名称限流
+
+![image-20220722183632751](pictures/image-20220722183632751.png)
+
+程序关闭，规则就会消失
+
+
+
+
+
+
+
+#### 按URL限流
+
+![image-20220722183933361](pictures/image-20220722183933361.png)
+
+
+
+上面两种问题：
+
+![image-20220722183909907](pictures/image-20220722183909907.png)
+
+> 解决：自定义一个类专门处理
+>
+> ![image-20220722223821767](pictures/image-20220722223821767.png)
+
+
+
+
+
+### 服务熔断
+
+![image-20220722224119665](pictures/image-20220722224119665.png)
+
+
+
+#### ribbon
+
+`blockHandler是只负责sentinel控制台配置违规，比如qps过高、多，等等`
+
+`fallback是对后台代码错误的处理，比如后台有个算术异常`
+
+![image-20220722232526508](pictures/image-20220722232526508.png)
+
+
+
+#### feign
+
+接口+注解
+
+
+
+#### 熔断框架比较
+
+![image-20220722233321458](pictures/image-20220722233321458.png)
+
+
+
+
+
+### 规则持久化
+
+![image-20220722233835742](pictures/image-20220722233835742.png)
+
+![image-20220722233845969](pictures/image-20220722233845969.png)
+
+> 不止可以持久化进mysql，多样化的
+
+![image-20220722234059910](pictures/image-20220722234059910.png)
+
+![image-20220722234248214](pictures/image-20220722234248214.png)
+
+
+
+
+
+
+
+
+
