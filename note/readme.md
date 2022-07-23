@@ -1054,5 +1054,216 @@
 
 
 
+## Seata处理分布式事务
+
+![image-20220722235000518](pictures/image-20220722235000518.png)
+
+![image-20220722235020847](pictures/image-20220722235020847.png)
+
+1+3：
+
+![image-20220722235303271](pictures/image-20220722235303271.png)
+
+![image-20220722235349313](pictures/image-20220722235349313.png)
+
+
+
+![image-20220722235508850](pictures/image-20220722235508850.png)
+
+![image-20220722235613599](pictures/image-20220722235613599.png)
+
+
+
+![image-20220723004228479](pictures/image-20220723004228479.png)
+
+
+
+### seata环境sql
+
+```mysql
+-- undo
+CREATE TABLE `undo_log` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `branch_id` bigint(20) NOT NULL,
+  `xid` varchar(100) NOT NULL,
+  `context` varchar(128) NOT NULL,
+  `rollback_info` longblob NOT NULL,
+  `log_status` int(11) NOT NULL,
+  `log_created` datetime NOT NULL,
+  `log_modified` datetime NOT NULL,
+  `ext` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ux_undo_log` (`xid`,`branch_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- seata_storage
+CREATE DATABASE seata_storage;
+USE seata_storage;
+CREATE TABLE t_storage(
+    id BIGINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+    product_id BIGINT(11) DEFAULT NULL COMMENT '产品id',
+    total INT(11) DEFAULT NULL COMMENT '总库存',
+    used INT(11) DEFAULT NULL COMMENT '已用库存',
+    residue INT(11) DEFAULT NULL COMMENT '剩余库存'
+)ENGINE=InnoDB AUTO_INCREMENT=7 CHARSET=utf8;
+INSERT INTO t_storage(id, product_id, total, used, residue) VALUES(1,1,100,0,100);
+
+-- seata_order
+CREATE DATABASE seata_order;
+USE seata_order;
+CREATE TABLE t_order(
+    id BIGINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+    user_id BIGINT(11) DEFAULT NULL COMMENT '用户id',
+    product_id BIGINT(11) DEFAULT NULL COMMENT '产品id',
+    count INT(11) DEFAULT NULL COMMENT '数量',
+    money DECIMAL(11,0) DEFAULT NULL COMMENT '金额',
+    status INT(1) DEFAULT NULL COMMENT '订单状态：0创建中，1已完结'
+)ENGINE=InnoDB AUTO_INCREMENT=7 CHARSET=utf8;
+
+-- seata_account
+CREATE DATABASE seata_account;
+USE seata_account;
+CREATE TABLE t_account(
+    id BIGINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+    user_id BIGINT(11) DEFAULT NULL COMMENT '用户id',
+    total DECIMAL(10,0) DEFAULT NULL COMMENT '总额度',
+    used DECIMAL(10,0) DEFAULT NULL COMMENT '已用额度',
+    residue DECIMAL(10,0) DEFAULT 0 COMMENT '剩余可用额度'
+)ENGINE=InnoDB AUTO_INCREMENT=7 CHARSET=utf8;
+INSERT INTO t_account(id, user_id, total, used, residue) VALUES(1,1,1000,0,1000);
+
+-- seata
+-- -------------------------------- The script used when storeMode is 'db' --------------------------------
+-- the table to store GlobalSession data
+CREATE TABLE IF NOT EXISTS `global_table`
+(
+    `xid`                       VARCHAR(128) NOT NULL,
+    `transaction_id`            BIGINT,
+    `status`                    TINYINT      NOT NULL,
+    `application_id`            VARCHAR(32),
+    `transaction_service_group` VARCHAR(32),
+    `transaction_name`          VARCHAR(128),
+    `timeout`                   INT,
+    `begin_time`                BIGINT,
+    `application_data`          VARCHAR(2000),
+    `gmt_create`                DATETIME,
+    `gmt_modified`              DATETIME,
+    PRIMARY KEY (`xid`),
+    KEY `idx_gmt_modified_status` (`gmt_modified`, `status`),
+    KEY `idx_transaction_id` (`transaction_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+-- the table to store BranchSession data
+CREATE TABLE IF NOT EXISTS `branch_table`
+(
+    `branch_id`         BIGINT       NOT NULL,
+    `xid`               VARCHAR(128) NOT NULL,
+    `transaction_id`    BIGINT,
+    `resource_group_id` VARCHAR(32),
+    `resource_id`       VARCHAR(256),
+    `branch_type`       VARCHAR(8),
+    `status`            TINYINT,
+    `client_id`         VARCHAR(64),
+    `application_data`  VARCHAR(2000),
+    `gmt_create`        DATETIME,
+    `gmt_modified`      DATETIME,
+    PRIMARY KEY (`branch_id`),
+    KEY `idx_xid` (`xid`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+-- the table to store lock data
+CREATE TABLE IF NOT EXISTS `lock_table`
+(
+    `row_key`        VARCHAR(128) NOT NULL,
+    `xid`            VARCHAR(96),
+    `transaction_id` BIGINT,
+    `branch_id`      BIGINT       NOT NULL,
+    `resource_id`    VARCHAR(256),
+    `table_name`     VARCHAR(32),
+    `pk`             VARCHAR(36),
+    `gmt_create`     DATETIME,
+    `gmt_modified`   DATETIME,
+    PRIMARY KEY (`row_key`),
+    KEY `idx_branch_id` (`branch_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+```
+
+
+
+### 案列
+
+![image-20220723154357773](pictures/image-20220723154357773.png)
+
+订单、账户、库存在三个不同的数据库上
+
+![image-20220723154436649](pictures/image-20220723154436649.png)
+
+![image-20220723181538715](pictures/image-20220723181538715.png)
+
+
+
+1. 正常访问：1号用户买1号商品买10个花了100块
+
+   ![image-20220723181413285](pictures/image-20220723181413285.png)
+
+   ![image-20220723181719668](pictures/image-20220723181719668.png)
+
+   
+
+2. 不加`@GlobalTransactional`，出现异常（在用户业务`service`中加入一段睡眠20s）
+
+   ![image-20220723182126487](pictures/image-20220723182126487.png)
+
+   多扣
+
+   ![image-20220723183124787](pictures/image-20220723183124787.png)
+
+   订单未完成
+
+   ![image-20220723183136797](pictures/image-20220723183136797.png)
+
+   
+
+3. `controller`上加`@GlobalTransactional`，出现异常
+
+   ![image-20220723184137806](pictures/image-20220723184137806.png)
+
+   但是数据库中没有新增数据了！！！
+
+
+
+### 原理补充
+
+![image-20220723184753210](pictures/image-20220723184753210.png)
+
+![image-20220723184826935](pictures/image-20220723184826935.png)
+
+
+
+![image-20220723184955566](pictures/image-20220723184955566.png)
+
+![image-20220723185026971](pictures/image-20220723185026971.png)
+
+![image-20220723185117225](pictures/image-20220723185117225.png)
+
+![image-20220723185201375](pictures/image-20220723185201375.png)
+
+![image-20220723185241623](pictures/image-20220723185241623.png)
+
+![image-20220723185323543](pictures/image-20220723185323543.png)
+
+![image-20220723190030694](pictures/image-20220723190030694.png)
+
+
+
+
+
+![image-20220723190123514](pictures/image-20220723190123514.png)
+
+![image-20220723190134417](pictures/image-20220723190134417.png)
+
 
 
